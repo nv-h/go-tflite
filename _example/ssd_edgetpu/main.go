@@ -23,9 +23,9 @@ import (
 
 var (
 	video     = flag.String("camera", "0", "video cature")
-	modelPath = flag.String("model", "mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite", "path to model file")
+	modelPath = flag.String("model", "ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite", "path to model file")
 	labelPath = flag.String("label", "coco_labels.txt", "path to label file")
-	verbosity = flag.Int("verbosity", 0, "Edge TPU Verbosity")
+	verbosity = flag.Int("verbosity", 1, "Edge TPU Verbosity")
 )
 
 type ssdResult struct {
@@ -144,6 +144,11 @@ func main() {
 		return
 	}
 	defer cam.Close()
+
+	// VGA 60fps
+	cam.Set(gocv.VideoCaptureFrameWidth, 640)
+	cam.Set(gocv.VideoCaptureFrameHeight, 480)
+	cam.Set(gocv.VideoCaptureFPS, 60)
 
 	window.ResizeWindow(
 		int(cam.Get(gocv.VideoCaptureFrameWidth)),

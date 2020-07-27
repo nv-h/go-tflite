@@ -22,7 +22,7 @@ import (
 
 var (
 	video     = flag.String("camera", "0", "video cature")
-	modelPath = flag.String("model", "detect.tflite", "path to model file")
+	modelPath = flag.String("model", "ssd_mobilenet_v2_coco_quant_postprocess.tflite", "path to model file")
 	labelPath = flag.String("label", "labelmap.txt", "path to label file")
 )
 
@@ -142,6 +142,11 @@ func main() {
 		return
 	}
 	defer cam.Close()
+
+	// VGA 60fps
+	cam.Set(gocv.VideoCaptureFrameWidth, 640)
+	cam.Set(gocv.VideoCaptureFrameHeight, 480)
+	cam.Set(gocv.VideoCaptureFPS, 60)
 
 	window.ResizeWindow(
 		int(cam.Get(gocv.VideoCaptureFrameWidth)),
